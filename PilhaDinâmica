@@ -1,0 +1,165 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <iostream>
+#include <locale.h>
+using namespace std;
+
+struct elemento // Criando Struct do Dado.
+{
+    int num;
+    struct elemento *prox;
+};
+
+typedef struct elemento* Pilha;
+typedef struct elemento Elem;
+
+Pilha* cria_Pilha() // Função de inicialização da Pilha.
+{
+    Pilha* pi = (Pilha*) new Pilha;
+    if(pi != NULL)
+    *pi = NULL;
+    return pi;
+}
+
+void libera_Pilha(Pilha* pi)
+{
+    if(pi != NULL)
+	{
+        Elem* no;
+        while((*pi) != NULL)
+		{
+            no = *pi;
+            *pi = (*pi)->prox;
+            delete no;
+        }
+        delete pi;
+    }
+}
+
+int insere_Pilha(Pilha* pi, int valor) // Inserir dados na Pilha.
+{
+    if(pi == NULL)
+	{
+    return 0;
+	}
+    Elem* no;
+    no = (Elem*) new Elem;
+    if(no == NULL)
+    {
+    return 0;
+	}
+    no->num = valor;
+    no->prox = (*pi);
+    *pi = no;
+    return 1;
+}
+
+int remove_Pilha(Pilha* pi) // Remover dados da Pilha.
+{
+    if(pi == NULL)
+	{
+    return 0;
+    }
+    if((*pi) == NULL)
+    {
+    return 0;
+    }
+    Elem *no = *pi;
+    *pi = no->prox;
+    delete no;
+    return 1;
+}
+
+int tamanho_Pilha(Pilha* pi) // Conferir o módulo do tamanho da Pilha.
+{
+    if(pi == NULL)
+	{
+    return 0;
+	}
+    int cont = 0;
+    Elem* no = *pi;
+    while(no != NULL)
+	{
+    cont++;
+    no = no->prox;
+    cout << "\n";
+    }
+    return cont;
+}
+
+void imprime_Pilha(Pilha* pi) // Imprimir os dados da Pilha.
+{
+    if(pi == NULL)
+	{
+    
+    }
+    Elem* no = *pi;
+    while(no != NULL)
+	{
+        cout << no->num;
+        cout << "\n";
+        no = no->prox;
+    }
+}
+
+int main()
+{
+    setlocale(LC_ALL, "Portuguese");
+	
+	int valor,insere,tamanho,remover,opt;
+    Pilha *pi=cria_Pilha();
+    
+	do
+	{
+    cout << "\n0. Sair:\n";
+    cout << "1. Listar pilha:\n";
+    cout << "2. Inserir na pilha:\n";
+    cout << "3. Remover da pilha:\n";
+    cout << "4. Tamanho da pilha:\n";
+    cout << "Opção: ";
+    cin >> opt;
+    switch(opt)
+	{
+        case(0):
+        break;
+        case(1):
+        cout << "pilha:\n";
+        imprime_Pilha(pi);
+        system("pause");
+        system("cls");
+        break;
+        case(2):
+            cout << "Entre com um numero:\n";
+            cin >> valor;
+            insere = insere_Pilha(pi,valor);
+            cout << "Inserido com sucesso!\n";
+            system("pause");
+        system("cls");
+        break;
+        case(3):
+            remover = remove_Pilha(pi);
+            if (remover == 0) // Precaução contra Erros.
+			{
+            cout << "Erro de remoção";
+			}
+            cout << "Removido com sucesso!\n";
+            system("pause");
+        system("cls");
+        break;
+        case(4):
+            tamanho= tamanho_Pilha(pi);
+            cout << "Quantidade de elementos da pilha:\n";
+            cout << tamanho;
+            system("pause");
+        system("cls");
+        break;
+        default:
+            cout << "Opção invalida!\n";
+            system("pause");
+        system("cls");
+        break;
+    }
+    }while(opt!=0);
+    return 0;
+}
